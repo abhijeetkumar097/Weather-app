@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            background-color: #000000;
+            color: #fff; 
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        input[type="text"], button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px; 
+        }
+        button {
+            cursor: pointer;
+            background-color: #1e811e; 
+            color: #fff;
+            transition: background-color 0.3s; 
+        }
+        button:hover {
+            background-color: #53575b; 
+        }
+        #result {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+
+        function checkWeather() {
+            var city = document.getElementById('cityInput').value.trim();
+            if (city === "") {
+                alert("Please enter a city name");
+                return;
+            }
+
+            socket.emit('wdata', city);
+        }
+
+        socket.on('data', function(data) {
+            var temperature = data.main.temp;
+            var Weather = data.weather[0].main;
+            document.getElementById('result').innerHTML = "Temperature: " + temperature + "°C";
+            document.getElementById('res').innerHTML = "Weather: " + Weather;
+        });
+
+        socket.on('error', function(err) {
+            document.getElementById('result').innerHTML = err;
+        });
+    </script>
+</head>
+<body>
+    <h1>Weather App</h1>
+    <input type="text" id="cityInput" placeholder="Enter city name">
+    <button onclick="checkWeather()">Get Weather</button>
+    <div id="result"></div>
+    <div id="res"></div>
+</body>
+</html>
