@@ -4,7 +4,7 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const axios = require('axios');
 
-const wapi = "f96d867a36c89ea7f37de8e8d777c3c7";
+const wapi = "";
 let city;
 
 app.get('/', function(req, res) {
